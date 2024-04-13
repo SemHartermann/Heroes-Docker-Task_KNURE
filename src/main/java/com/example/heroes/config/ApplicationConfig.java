@@ -1,4 +1,4 @@
-package dev.zhivotov.dotamatchupper.config;
+package com.example.heroes.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

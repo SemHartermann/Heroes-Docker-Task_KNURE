@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  postgres-server:
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+    build:
+      context: ./
+      dockerfile: Dockerfile-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: heroes
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 60s
+      retries: 3
+      start_period: 10s
+
+  application-jar:
+    networks:
+      - my-network
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-server/heroes
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres-server
+    ports:
+      - "8082:8080"
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  pgdata:

@@ -1,12 +1,6 @@
 FROM eclipse-temurin:21.0.1_12-jre
-EXPOSE 8080
-RUN addgroup -S spring-group \
-    && adduser -S spring -G spring-group
-USER spring:spring-group
-ARG JAR_FILE=demo.jar
+ARG JAR_FILE=heroes.jar
 ARG WORKDIR_PATH=/app
 WORKDIR ${WORKDIR_PATH}
 COPY ${JAR_FILE} ${JAR_FILE}
-RUN pwd \
-    && ls
-ENTRYPOINT ["java", "-jar", "/app/demo.jar"]
+ENTRYPOINT ["java", "-jar", "/app/heroes.jar"]
